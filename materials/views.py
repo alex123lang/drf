@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.viewsets import ModelViewSet
@@ -9,9 +10,9 @@ from materials.serializers import CourseSerializer, LessonSerializer, CourseDeta
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filter_backends = [filters.OrderingFilter]
-    filterest_fields = ('lesson',)
-    ordering_fields = ('lesson',)
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterest_fields = ('lesson', 'payment_method',)
+    ordering_fields = ('date_of_payment',)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -41,4 +42,3 @@ class LessonUpdateAPIView(UpdateAPIView):
 class LessonDestroyAPIView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-
