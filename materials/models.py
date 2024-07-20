@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-
 
 NULLABLE = {"blank": True, "null": True}
 
@@ -17,6 +17,7 @@ class Course(models.Model):
     description = models.TextField(
         **NULLABLE, verbose_name="Описание курса", help_text="Укажите описание курса"
     )
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = "Курс"
@@ -42,6 +43,7 @@ class Lesson(models.Model):
         verbose_name="Ссылка на видео",
         help_text="Укажите ссылку на видео",
     )
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = "Урок"
