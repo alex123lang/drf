@@ -10,6 +10,6 @@ class IsModerator(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if obj.owner == request.user:
+        if obj.author == request.user:
             return True
         return False

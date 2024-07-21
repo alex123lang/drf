@@ -3,7 +3,8 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from materials.apps import MaterialsConfig
-from materials.views import CourseViewSet, LessonListAPIView, LessonRetrieveAPIView, LessonCreateAPIView, LessonDestroyAPIView, LessonUpdateAPIView
+from materials.views import CourseViewSet, LessonListAPIView, LessonRetrieveAPIView, LessonCreateAPIView, \
+        LessonDestroyAPIView, LessonUpdateAPIView, SubscriptionCreateAPIView
 
 router = SimpleRouter()
 router.register('', CourseViewSet)
@@ -17,4 +18,5 @@ urlpatterns = [
         path('lessons/<int:pk>/', LessonRetrieveAPIView.as_view(), name='lessons-retrieve'),
         path('lessons/<int:pk>/update/', LessonUpdateAPIView.as_view(), name='lessons-update'),
         path('lessons/<int:pk>/delete/', LessonDestroyAPIView.as_view(), name='lessons-delete'),
+        path('subscription/create/', SubscriptionCreateAPIView.as_view(), name='subscription-create')
 ] + router.urls
