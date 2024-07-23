@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from config import settings
 from materials.models import Course, Lesson
 
 NULLABLE = {"blank": True, "null": True}
@@ -27,13 +28,17 @@ class User(AbstractUser):
 
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Пользователь'),
-    date_of_payment = models.DateTimeField(auto_now_add=True, verbose_name='Дата оплаты'),
-    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Оплаченный курс", **NULLABLE),
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Оплаченный урок", **NULLABLE),
+    date_of_payment = models.DateTimeField(auto_now_add=True, verbose_name='Дата оплаты')
+    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Оплаченный курс", **NULLABLE)
+    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Оплаченный урок", **NULLABLE)
     payment_sum = models.PositiveIntegerField(verbose_name='Cумма платежа')
-    method_choices = {"наличными": "наличными", "переводом": "переводом"}
+    method_choices = [("наличными", "наличными"), ("переводом", "переводом")]
     payment_method = models.CharField(max_length=50, choices=method_choices, verbose_name='Способ оплаты')
+
+    session_id = models.CharField(max_length=255, verbose_name='Id сессии', **NULLABLE)
+    link = models.URLField(max_length=400, verbose_name='Cсылка на оплату', **NULLABLE)
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='payments')
 
     def __str__(self):
         return (f'{self.user}: {self.date_of_payment}, {self.payment_sum}, {self.payment_method}, '
