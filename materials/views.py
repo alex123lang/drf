@@ -12,15 +12,16 @@ from materials.paginators import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscriptionSerializer
 from users.permissions import IsModerator, IsOwner
 
+from materials.tasks import sending_emails_for_update_course
+
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterest_fields = ('lesson', 'payment_method',)
+    filterest_fields = ('lessons', 'payment_method',)
     ordering_fields = ('date_of_payment',)
     pagination_class = CustomPagination
-
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -38,6 +39,11 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModerator | IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        sending_emails_for_update_course.delay(instance.id)
+        return instance
 
 
 class LessonCreateAPIView(CreateAPIView):

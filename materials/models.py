@@ -44,6 +44,7 @@ class Lesson(models.Model):
         help_text="Укажите ссылку на видео",
     )
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс', related_name='course', **NULLABLE)
 
     class Meta:
         verbose_name = "Урок"

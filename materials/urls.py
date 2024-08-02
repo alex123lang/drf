@@ -1,13 +1,13 @@
 from django.urls import path
 
-from rest_framework.routers import SimpleRouter
+from rest_framework.routers import DefaultRouter
 
 from materials.apps import MaterialsConfig
 from materials.views import CourseViewSet, LessonListAPIView, LessonRetrieveAPIView, LessonCreateAPIView, \
         LessonDestroyAPIView, LessonUpdateAPIView, SubscriptionCreateAPIView
 
-router = SimpleRouter()
-router.register('', CourseViewSet)
+router = DefaultRouter()
+router.register(r'course', CourseViewSet, basename='course')
 
 app_name = MaterialsConfig.name
 
