@@ -8,3 +8,5 @@ djangorestframework-simplejwt==5.3.1
 stripe~=10.4.0
 celery~=5.4.0
 redis==5.0.8
+drf-yasg==1.21.7
+django-celery-beat==2.6.0
